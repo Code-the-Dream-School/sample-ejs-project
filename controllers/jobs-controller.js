@@ -69,12 +69,12 @@ const edit_job = async (req, res) => {
   });
   if (!this_job) {
     req.flash("error", "That job was not found.");
-    res.redirect("/jobs");
+    return res.redirect("/jobs");
   }
   const job_values = {};
-  job_values.company = this_job.company;
-  job_values.position = this_job.position;
-  job_values.status = this_job.status;
+  job_values.company = this_job.company || "";
+  job_values.position = this_job.position || "";
+  job_values.status = this_job.status || "";
   job_values.action = `/jobs/update/${this_job._id}`;
   job_values.submit = "Update";
   job_values.title = "Edit a Job Entry";
@@ -101,7 +101,7 @@ const update_job = async (req, res, next) => {
       job_values.company = req.body.company;
       job_values.position = req.body.position;
       job_values.status = req.body.status;
-      job_values.action = `/jobs/update/${this_job._id}`;
+      job_values.action = `/jobs/update/${req.params.job}`;
       job_values.submit = "Update";
       job_values.title = "Edit a Job Entry";
       return res.render("pages/job", {
