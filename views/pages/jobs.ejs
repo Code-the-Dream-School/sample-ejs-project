@@ -1,0 +1,24 @@
+<%- include('../partials/head', {errors, info}) %>
+<%- include('../partials/navbar') %>
+<% if (jobs.length === 0) { %>
+    <h2 style="text-align: center;">There are no jobs to display.</h2>
+<% } else { %>
+    <table id="jobs-table" class="table">
+        <tr id="jobs-table-header">
+          <th scope="col">Company</th>
+          <th scope="col">Position</th>
+          <th scope="col">Status</th>
+          <th colspan="2" scope="col"></th>
+        </tr>
+        <% jobs.forEach((job) => { %>
+        <tr>
+          <td><%= job.company %></td>
+          <td><%= job.position %></td>
+          <td><%= job.status %></td>
+          <td><a class="editButton btn btn-primary" href="/jobs/edit/<%= job._id %>">edit</a></td>
+          <td><a class="deleteButton btn btn-primary" href="/jobs/delete/<%= job._id %>">delete</a></td>
+        </tr>
+        <% }); %>
+      </table>
+<% } %>
+<%- include("../partials/foot") %>

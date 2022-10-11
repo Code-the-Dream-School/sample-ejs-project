@@ -1,0 +1,33 @@
+<%- include("../partials/head", {errors, info}) %>
+  <div class="container justify-content-center">
+    <div class="w-50 container">
+       <div class="mt-10 mb-10">
+      <h1 style="text-align: center;">Sign Up</h1>
+    </div>
+      <div class="mb-3 border border-5">
+      <form action="/sign-up" method="POST">
+        <div class="mb-3 ms-3 m3-3">
+          <label for="name" class="form-label">Name</label>
+          <input name="name" id="name" type="text" class="form-control" value="<%= user_values.name %>"/>
+        </div>
+        <div class="mb-3 ms-3 m3-3">
+          <label for="email" class="form-label">Email</label>
+          <input name="email" id="email" type="text" class="form-control" value="<%= user_values.email %>"/>
+        </div>
+        <div class="mb-3 ms-3 me-3">
+          <label for="password" class="form-label">Password</label>
+          <input name="password" id="password" type="password" class="form-control"/>
+        </div>
+        <div class="mb-3 ms-3 me-3">
+          <label for="password-confirm" class="form-label">Confirm Password</label>
+          <input name="password_confirm" id="password-confirm" type="password" class="form-control"/>
+        </div>
+        <div class="mb-3 ms-3 me-3">
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </div>
+      </form>
+    </div class="mt-10">
+      <a href="/" class="btn btn-primary mt-10">Back</a>
+    </div>
+    </div>
+<%- include("../partials/foot") %>

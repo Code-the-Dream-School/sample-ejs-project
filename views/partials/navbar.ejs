@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary"  style="width: 100vw">
+    <div class="container-fluid" style="max-width: 1800px; margin-left: 0px">
+      <!-- <a class="navbar-brand" style="margin-left: 20px" href="/api/v1/events/dashboard">
+        <img src="/logo.png" alt="logo" style="width: 40px" /> navbar-light bg-light
+      </a> -->
+        <button class="navbar-toggler" 
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarColor03"
+        aria-controls="navbarColor03"
+        aria-expanded="true"
+        aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      <div 
+      class="navbar-collapse collapse" 
+      id="navbarColor03"
+      style="text-align:right; margin-right: 20px;">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/jobs">Jobs</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/jobs/add">Add a Job</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ">
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle "
+              data-bs-toggle="dropdown"
+              href="#"
+              aria-haspopup="true"
+              aria-expanded="false"
+              >
+              <%= currentUser.name %>
+              </a>
+            <div class="dropdown-menu text-sm-right margin-sm-auto" style="width: fit-content; margin-left: auto;">
+              <a class="dropdown-item" href="/logoff" style="text-align: center" >Logoff</a>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>

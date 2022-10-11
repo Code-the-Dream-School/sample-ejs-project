@@ -1,0 +1,33 @@
+<%- include('../partials/head', {errors, info}); %>
+<%- include('../partials/navbar'); %>
+<div class="container justify-content-center">
+  <div class="w-50 container">
+     <div class="mt-10 mb-10">
+    <h1 style="text-align: center;"><%= job_values.title %></h1>
+  </div>
+    <div class="mb-3 border border-5">
+    <form action="<%= job_values.action %>" method="POST">
+      <div class="mb-3 ms-3 m3-3">
+        <label for="company" class="form-label">Company</label>
+        <input name="company" id="company" type="text" class="form-control" value="<%= job_values.company %>"/>
+      </div>
+      <div class="mb-3 ms-3 me-3">
+        <label for="position" class="form-label">Position</label>
+        <input name="position" id="position" type="text" class="form-control" value="<%= job_values.position %>"/>
+      </div>
+      <div class="mb-3 ms-3 me-3">
+        <select name="status" id="status" class="form-select" value="<%= job_values.status %>">
+          <% status_values.forEach((stat_name)=>{ %>
+            <option value="<%= stat_name %>"><%= stat_name %></option>
+          <% }) %>
+        </select>
+      </div>
+      <div class="mb-3 ms-3 me-3">
+      <button type="submit" class="btn btn-primary"><%= job_values.submit %></button>
+    </div>
+    </form>
+  </div class="mt-10">
+    <a href="/jobs" class="btn btn-primary mt-10">Back</a>
+  </div>
+  </div>
+  <%- include("../partials/foot") %>
