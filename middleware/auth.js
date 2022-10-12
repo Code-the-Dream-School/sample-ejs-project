@@ -1,5 +1,5 @@
 const crypto = require("crypto");
-const session = require("express-session");
+const bcrypt = require("bcryptjs");
 
 const authMiddleware = (req, res, next) => {
   if (!req.user) {
@@ -15,25 +15,65 @@ const setCurrentUser = (req, res, next) => {
   next();
 };
 
-const setCsrfToken = (req,res,next) => {
-  if (!req.session.csrf) {
-      const bytes = crypto.randomBytes(10);
-      const csrf = bytes.toString('hex');
-      req.session.csrf = csrf;
-      res.locals.csrf = csrf;
-      return next();  
+const setCsrfToken = async (req, res, next) => {
+  const random_promise = (length) => {
+    return new Promise((resolve, reject) => {
+      crypto.randomBytes(length, (err, bytes) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(bytes);
+      });
+    });
+  };
+  const build_secrets = async () => {
+    if (res.locals.csrf) {
+      return new Promise.resolve();
+    }
+    let csrfSecret;
+    if (!req.session.csrfSecret) {
+      const bytes = await random_promise(10);
+      csrfSecret = bytes.toString("hex");
+      req.session.csrfSecret = csrfSecret;
+    }
+    const salt = await bcrypt.genSalt(10);
+    const csrf = await bcrypt.hash(
+      csrfSecret + process.env.SESSION_SECRET,
+      salt
+    );
+    res.locals.csrf = csrf.toString("hex");
+    return;
+  };
+  let csrf_promise;
+  if (!req.session.csrf_promise) {
+    csrf_promise = build_secrets();
+    req.session.csrf_promise = csrf_promise;
   }
-  res.locals.csrf = req.session.csrf;
+
+  await req.session.csrf_promise;
+  delete req.session.csrf_promise;
   next();
 };
 
-const checkCsrfToken = (req,res,next) => {
+const checkCsrfToken = async (req, res, next) => {
   if (req.body && Object.keys(req.body).length > 0) {
-    if (req.body.csrf != req.session.csrf) {
+    let result = false;
+    if (req.body.csrf) {
+      result = await bcrypt.compare(
+        res.locals.csrfSecret + process.env.SESSION_SECRET,
+        req.body.csrf
+      );
+    }
+    if (!result) {
       return next(new Error("CSRF violation"));
     }
   }
   next();
 };
 
-module.exports = { authMiddleware, setCurrentUser, setCsrfToken, checkCsrfToken };
+module.exports = {
+  authMiddleware,
+  setCurrentUser,
+  setCsrfToken,
+  checkCsrfToken,
+};
