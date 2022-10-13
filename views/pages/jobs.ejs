@@ -15,10 +15,37 @@
           <td><%= job.company %></td>
           <td><%= job.position %></td>
           <td><%= job.status %></td>
-          <td><a class="editButton btn btn-primary" href="/jobs/edit/<%= job._id %>">edit</a></td>
-          <td><a class="deleteButton btn btn-primary" href="/jobs/delete/<%= job._id %>">delete</a></td>
+          <td><a class="btn btn-primary" href="/jobs/edit/<%= job._id %>">edit</a></td>
+          <td><button type="button" class="deleteButton btn btn-primary" data-id="<%= job._id %>">delete</button></td>
         </tr>
         <% }); %>
       </table>
+      <script>
+      document.addEventListener("DOMContentLoaded", ()=>{
+        const table = document.getElementById("jobs-table");
+        table.addEventListener("click", async (event) => {
+          if (event.target.classList.contains("deleteButton")) {
+            const job_id = event.target.dataset.id;
+            event.preventDefault();
+            try {
+              response = await fetch(`/jobs/delete/${job_id}`, { method: "DELETE"});
+              window.location = response.url;
+            } catch {
+              const body = document.getElementById("body");
+              const alert_html = "<div class=\"alert alert-danger\" role=\"alert\">A communications error occurred.</div>";
+              const temp_div = document.createElement("div");
+              temp_div.innerHTML = alert_html;
+              const alerts = document.getElementsByClassName("alert");
+              Array.prototype.forEach.call(alerts, (alert) =>{
+                 body.removeChild(alert);
+              });
+              const new_alert = document.createElement("div");
+              new_alert.innerHTML = alert_html;
+              body.prepend(temp_div.firstChild);
+            }
+          };
+        });
+      });
+      </script>
 <% } %>
 <%- include("../partials/foot") %>
