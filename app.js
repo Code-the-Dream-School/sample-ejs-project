@@ -16,8 +16,7 @@ const jobs_router = require("./routes/job-routes");
 const {
   authMiddleware,
   setCurrentUser,
-  setCsrfToken,
-  checkCsrfToken,
+  csrf,
 } = require("./middleware/auth");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const notFoundMiddleware = require("./middleware/not-found");
@@ -71,29 +70,21 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",
+          "'unsafe-inline'"
         ],
-
         objectSrc: ["'none'"],
         styleSrc: [
           "'self'",
           "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css",
-          "'unsafe-hashes'",
-          "'sha256-m8Uxqb3yGNc1FBOKoIJo9YxPopiEfCue7WoC/rCdf2Y='",
-          "'sha256-xVHgH2V6er5eSm5nIlOBQtalUkdb8AL1sxyR+e/J83o='",
-          "'sha256-/D1GBy8M380Ec3bO5CrlEe1iNQZAC1SV+x8LsWshit8='",
-          "'sha256-EfW3Zbnjm+yHzv/sVafFCDCssmn4b4Iugv2ddQW2a6s='",
-          "'sha256-Y9v1MZrln1N8aPBY5lmpxYKwFkcp/nyBMMEnn7WFjuw='",
-          "'sha256-+17AcPK/e5AtiK52Z2vnx3uG3BMzyzRr4Qv5UQsEbDU='",
+          "'unsafe-inline'",
         ],
-
-        upgradeInsecureRequests: [],
+        upgradeInsecureRequests: null,
       },
     },
   })
 );
 app.use(xss());
-app.use(setCsrfToken);
-app.use(checkCsrfToken);
+app.use(csrf);
 app.use(setCurrentUser);
 app.use("/", page_router);
 app.use("/jobs", authMiddleware, jobs_router);
