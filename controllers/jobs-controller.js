@@ -50,7 +50,7 @@ const add_job = async (req, res, next) => {
         submit: "Add",
         title: "Add a Job Entry",
       };
-      await setCsrf(req,res);
+      await setCsrf(req, res);
       return res.render("pages/job", {
         status_values,
         job_values,
@@ -81,7 +81,7 @@ const edit_job = async (req, res) => {
   job_values.action = `/jobs/update/${this_job._id}`;
   job_values.submit = "Update";
   job_values.title = "Edit a Job Entry";
-  await setCsrf(req,res);
+  await setCsrf(req, res);
   res.render("pages/job", {
     status_values,
     job_values,
@@ -108,7 +108,7 @@ const update_job = async (req, res, next) => {
       job_values.action = `/jobs/update/${req.params.job}`;
       job_values.submit = "Update";
       job_values.title = "Edit a Job Entry";
-      await setCsrf(req,res);
+      await setCsrf(req, res);
       return res.render("pages/job", {
         status_values,
         job_values,

@@ -1,7 +1,7 @@
 {
-  "name": "passport-demo",
-  "version": "1.1.0",
-  "description": "",
+  "name": "sample-ejs-app",
+  "version": "1.0.0",
+  "description": "An example of an app for Express and EJS.",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
     "dev": "nodemon app"
   },
   "keywords": [],
-  "author": "",
+  "author": "John McGarvey",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -29,8 +29,6 @@
     "xss-clean": "^0.1.1"
   },
   "devDependencies": {
-    "eslint": "^8.23.1",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.7.1"
+    "nodemon": "^2.0.15"
   }
 }
