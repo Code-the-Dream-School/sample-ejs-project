@@ -13,7 +13,7 @@ const render_index = (req, res) => {
 };
 
 const render_sign_up = async (req, res) => {
-  await setCsrf(req,res);
+  await setCsrf(req, res);
   res.render("pages/sign-up-form", {
     user_values: {},
     errors: req.flash("error"),

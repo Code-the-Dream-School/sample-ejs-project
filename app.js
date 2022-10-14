@@ -13,11 +13,7 @@ const passport_init = require("./passport/passport_init");
 const connectDB = require("./db/connect");
 const page_router = require("./routes/page_routes");
 const jobs_router = require("./routes/job-routes");
-const {
-  authMiddleware,
-  setCurrentUser,
-  csrf,
-} = require("./middleware/auth");
+const { authMiddleware, setCurrentUser, csrf } = require("./middleware/auth");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const notFoundMiddleware = require("./middleware/not-found");
 
@@ -70,7 +66,7 @@ app.use(
         scriptSrc: [
           "'self'",
           "https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js",
-          "'unsafe-inline'"
+          "'unsafe-inline'",
         ],
         objectSrc: ["'none'"],
         styleSrc: [
