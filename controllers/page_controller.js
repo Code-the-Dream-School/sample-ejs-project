@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const parse_v = require("../util/parse_v_error");
-const { setCsrf } = require("../middleware/auth");
 
 const render_index = (req, res) => {
   if (req.user) {
@@ -12,8 +11,7 @@ const render_index = (req, res) => {
   });
 };
 
-const render_sign_up = async (req, res) => {
-  await setCsrf(req, res);
+const render_sign_up = (req, res) => {
   res.render("pages/sign-up-form", {
     user_values: {},
     errors: req.flash("error"),
@@ -73,11 +71,10 @@ const log_out = (req, res) => {
   });
 };
 
-const logon = async (req, res) => {
+const logon = (req, res) => {
   if (req.user) {
     return res.redirect("/jobs");
   }
-  await setCsrf(req, res);
   res.render("pages/logon", {
     errors: req.flash("error"),
     info: req.flash("info"),
