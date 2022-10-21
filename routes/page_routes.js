@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const router = express.Router();
+const { refreshCSRF } = require("../middleware/auth");
 
 const {
   render_index,
@@ -20,7 +21,8 @@ router
       successRedirect: "/jobs",
       failureRedirect: "/logon",
       failureFlash: true,
-    })
+    }),
+    refreshCSRF
   );
 router.route("/logoff").get(log_out);
 

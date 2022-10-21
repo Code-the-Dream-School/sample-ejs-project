@@ -1,5 +1,4 @@
-const crypto = require("crypto");
-const bcrypt = require("bcryptjs");
+const { randomUUID } = require("crypto");
 
 const authMiddleware = (req, res, next) => {
   if (!req.user) {
@@ -22,65 +21,48 @@ class CsrfError extends Error {
   }
 }
 
-const setCsrf = async (req, res) => {
-  const salt = await bcrypt.genSalt(10);
-  const csrf = await bcrypt.hash(
-    req.session._csrfSecret + process.env.SESSION_SECRET,
-    salt
-  );
-  res.locals._csrf = csrf;
-};
-
-const csrf = async (req, res, next) => {
-  const random_promise = (length) => {
-    return new Promise((resolve, reject) => {
-      crypto.randomBytes(length, (err, bytes) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(bytes);
-      });
-    });
-  };
-  if (!req.session._csrfSecret) {
-    let newSecret = await random_promise(10);
-    newSecret = newSecret.toString("hex");
-    if (!req.session._csrfSecret) {
-      // may have been set by another request
-      // if so we won't change it
-      req.session._csrfSecret = newSecret;
-    }
+const csrf = (req, res, next) => {
+  let _csrf = null;
+  if (!req.session._csrf) {
+    _csrf = randomUUID();
+    req.session._csrf = _csrf;
+  } else {
+    _csrf = req.session._csrf;
   }
+  res.locals._csrf = _csrf;
   if (req.method === "POST") {
     let content_type = req.get("content-type");
-    content_type = content_type.toLowerCase();
-    if (
-      content_type === "application/x-www-form-urlencoded" ||
-      content_type === "text/plain" ||
-      content_type === "multipart/form-data"
-    ) {
-      let result = false;
-      if (req.body && req.body._csrf) {
-        result = await bcrypt.compare(
-          req.session._csrfSecret + process.env.SESSION_SECRET,
-          req.body._csrf
-        );
+    let protected_content = false;
+    if (!content_type) {
+      protected_content = true;
+    } else {
+      content_type = content_type.toLowerCase();
+      if (
+        content_type === "application/x-www-form-urlencoded" ||
+        content_type === "text/plain" ||
+        content_type === "multipart/form-data"
+      ) {
+        protected_content = true;
       }
-      if (!result) {
-        return next(
-          new CsrfError(
+      if (protected_content) {
+        if (!req.body || req.body._csrf != _csrf)
+          throw new CsrfError(
             "A POST request was received without a valid CSRF token."
-          )
-        );
+          );
       }
     }
   }
   next();
 };
 
+const refreshCSRF = (req, res) => {
+  req.session._csrf = randomUUID();
+  res.locals._csrf = req.session._csrf;
+}
+
 module.exports = {
   authMiddleware,
   setCurrentUser,
-  setCsrf,
   csrf,
+  refreshCSRF,
 };
